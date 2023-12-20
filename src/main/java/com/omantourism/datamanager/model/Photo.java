@@ -1,4 +1,4 @@
-package com.omantourism.datamanager;
+package com.omantourism.datamanager.model;
 
 public class Photo {
     public String id;
