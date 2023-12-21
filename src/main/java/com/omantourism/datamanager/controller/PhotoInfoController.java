@@ -1,13 +1,11 @@
 package com.omantourism.datamanager.controller;
 
-import com.omantourism.datamanager.model.Photo;
+import com.omantourism.datamanager.model.PhotoInfo;
 import com.omantourism.datamanager.service.PhotoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/api/v1/photos")
@@ -17,27 +15,27 @@ public class PhotoInfoController {
     PhotoInfoService photoInfoService;
 
     @GetMapping
-    public List<Photo> getAllPhotos() {
+    public List<PhotoInfo> getAllPhotos() {
         return photoInfoService.getPhotos();
     }
 
     @GetMapping(path = "/{photoId}")
-    public Photo getSpecificPhoto(@PathVariable String photoId) {
+    public PhotoInfo getSpecificPhoto(@PathVariable String photoId) {
         return photoInfoService.getPhoto(photoId);
     }
 
     @PostMapping
-    public Photo addPhoto(@RequestBody Photo incomingPhoto){
-        return photoInfoService.createPhoto(incomingPhoto);
+    public PhotoInfo addPhoto(@RequestBody PhotoInfo incomingPhotoInfo){
+        return photoInfoService.createPhoto(incomingPhotoInfo);
     }
 
     @PutMapping(path = "/{photoId}")
-    public Photo updatePhoto(@PathVariable String photoId, @RequestBody Photo incomingPhoto) {
-        return photoInfoService.updatePhoto(photoId, incomingPhoto);
+    public PhotoInfo updatePhoto(@PathVariable String photoId, @RequestBody PhotoInfo incomingPhotoInfo) {
+        return photoInfoService.updatePhoto(photoId, incomingPhotoInfo);
     }
 
     @DeleteMapping(path = "/{photoId}")
-    public Photo removePhoto(@PathVariable String photoId) {
+    public PhotoInfo removePhoto(@PathVariable String photoId) {
         return photoInfoService.deletePhoto(photoId);
     }
 }
