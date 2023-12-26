@@ -20,7 +20,7 @@ public class PhotoInfoController {
     }
 
     @GetMapping(path = "/{photoId}")
-    public PhotoInfo getSpecificPhoto(@PathVariable String photoId) {
+    public PhotoInfo getSpecificPhoto(@PathVariable Integer photoId) {
         return photoInfoService.getPhoto(photoId);
     }
 
@@ -30,12 +30,12 @@ public class PhotoInfoController {
     }
 
     @PutMapping(path = "/{photoId}")
-    public PhotoInfo updatePhoto(@PathVariable String photoId, @RequestBody PhotoInfo incomingPhotoInfo) {
+    public PhotoInfo updatePhoto(@PathVariable Integer photoId, @RequestBody PhotoInfo incomingPhotoInfo) {
         return photoInfoService.updatePhoto(photoId, incomingPhotoInfo);
     }
 
     @DeleteMapping(path = "/{photoId}")
-    public PhotoInfo removePhoto(@PathVariable String photoId) {
+    public PhotoInfo removePhoto(@PathVariable Integer photoId) {
         return photoInfoService.deletePhoto(photoId);
     }
 }

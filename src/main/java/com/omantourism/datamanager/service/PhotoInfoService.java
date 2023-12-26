@@ -1,6 +1,9 @@
 package com.omantourism.datamanager.service;
 
 import com.omantourism.datamanager.model.PhotoInfo;
+import com.omantourism.datamanager.repository.PhotoInfoRepository;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -12,14 +15,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class PhotoInfoService {
     public CopyOnWriteArrayList<PhotoInfo> photoInfoCollection = new CopyOnWriteArrayList<>();
 
+    @Autowired
+    public PhotoInfoRepository photoInfoRepository;
+
     public List<PhotoInfo> getPhotos() {
-        return photoInfoCollection;
+        return photoInfoRepository.findAll();
     }
 
-    public PhotoInfo getPhoto(String photoId) {
+    public PhotoInfo getPhoto(Integer photoId) {
         PhotoInfo resultPhotoInfo = null;
         Optional<PhotoInfo> foundPhoto = photoInfoCollection.stream().filter((currPhotoInfo) -> {
-            return currPhotoInfo.id.equals(photoId);
+            return currPhotoInfo.id == photoId;
         }).findFirst();
 
         if (foundPhoto.isPresent()) {
@@ -30,11 +36,11 @@ public class PhotoInfoService {
     }
 
     public PhotoInfo createPhoto(PhotoInfo incomingPhotoInfo){
-        photoInfoCollection.add(incomingPhotoInfo);
+        photoInfoRepository.save(incomingPhotoInfo);
         return incomingPhotoInfo;
     }
 
-    public PhotoInfo updatePhoto(String photoId, PhotoInfo incomingPhotoInfo) {
+    public PhotoInfo updatePhoto(Integer photoId, PhotoInfo incomingPhotoInfo) {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
         foundPhotoInfo.label = incomingPhotoInfo.label;
         foundPhotoInfo.description = incomingPhotoInfo.description;
@@ -42,7 +48,7 @@ public class PhotoInfoService {
         return foundPhotoInfo;
     }
 
-    public PhotoInfo deletePhoto(@PathVariable String photoId) {
+    public PhotoInfo deletePhoto(@PathVariable Integer photoId) {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
         photoInfoCollection.remove(foundPhotoInfo);
         return foundPhotoInfo;
