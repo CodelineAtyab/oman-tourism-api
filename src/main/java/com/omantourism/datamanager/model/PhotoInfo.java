@@ -2,6 +2,8 @@ package com.omantourism.datamanager.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class PhotoInfo {
     @Id
@@ -11,7 +13,11 @@ public class PhotoInfo {
     public String description;
     public String path;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "photo_type_id", referencedColumnName = "id")
-    public PhotoType photoType;
+    @ManyToMany
+    @JoinTable(
+            name = "photo_info_photo_type_map",
+            joinColumns = @JoinColumn(name = "photoinfo_id"),
+            inverseJoinColumns = @JoinColumn(name = "phototype_id")
+    )
+    public Set<PhotoType> photoTypes;
 }

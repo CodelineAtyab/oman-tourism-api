@@ -1,6 +1,8 @@
 package com.omantourism.datamanager.model;
 
+import java.util.Set;
+
 public class PhotoInfoWithType {
     public PhotoInfo photoInfo;
-    public Integer photoTypeId;
+    public Set<Integer> photoTypeIds;
 }

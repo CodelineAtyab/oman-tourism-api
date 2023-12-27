@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PhotoInfoService {
@@ -40,7 +41,10 @@ public class PhotoInfoService {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
         foundPhotoInfo.label = incomingPhotoInfoWithType.photoInfo.label;
         foundPhotoInfo.description = incomingPhotoInfoWithType.photoInfo.description;
-        foundPhotoInfo.photoType = photoTypeRepository.findById(incomingPhotoInfoWithType.photoTypeId).get();
+
+        foundPhotoInfo.photoTypes =  photoTypeRepository.findAll().stream().filter((currPhotoType) -> {
+            return incomingPhotoInfoWithType.photoTypeIds.contains(currPhotoType.id);
+        }).collect(Collectors.toSet());
 
         return photoInfoRepository.save(foundPhotoInfo);
     }

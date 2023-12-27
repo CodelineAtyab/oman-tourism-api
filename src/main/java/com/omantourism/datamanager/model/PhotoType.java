@@ -3,6 +3,8 @@ package com.omantourism.datamanager.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 public class PhotoType {
     @Id
@@ -17,7 +19,7 @@ public class PhotoType {
         this.type = type;
     }
 
-    @OneToOne(mappedBy = "photoType")
+    @ManyToMany(mappedBy = "photoTypes")
     @JsonIgnore
-    public PhotoInfo photoInfo;
+    public Set<PhotoInfo> photoInfos;
 }
