@@ -1,9 +1,6 @@
 package com.omantourism.datamanager.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class PhotoInfo {
@@ -14,10 +11,7 @@ public class PhotoInfo {
     public String description;
     public String path;
 
-//    public PhotoInfo(String id, String label, String description, String path) {
-//        this.id = id;
-//        this.label = label;
-//        this.description = description;
-//        this.path = path;
-//    }
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "photo_type_id", referencedColumnName = "id")
+    public PhotoType photoType;
 }

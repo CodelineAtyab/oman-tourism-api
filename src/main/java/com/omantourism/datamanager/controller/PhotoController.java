@@ -27,16 +27,15 @@ public class PhotoController {
     }
 
     @PostMapping
-    public ResponseEntity<PhotoInfo> uploadContent(@RequestParam MultipartFile photoFile,
-                                           @RequestParam String photoFileId) throws IOException {
-        File destinationFile = new File("%s/%s.%s".formatted("./data", photoFileId, "jpg"));
+    public ResponseEntity<PhotoInfo> uploadContent(@RequestParam MultipartFile photoFile) throws IOException {
+        PhotoInfo savedPhotoInfo = photoInfoService.createPhoto(new PhotoInfo());
+
+        // Save the picture to the file system
+        File destinationFile = new File("%s/%s.%s".formatted("./data", savedPhotoInfo.id, "jpg"));
         FileUtils.copyInputStreamToFile(photoFile.getInputStream(), destinationFile);
-        PhotoInfo photoInfo = new PhotoInfo();
-        photoInfo.label = null;
-        photoInfo.description = null;
-        photoInfo.path = destinationFile.getPath();
-        photoInfoService.createPhoto(photoInfo);
-        return ResponseEntity.ok(photoInfo);
+
+        // Once we have the auto gen ID from DB, we can now update the path and update the DB record.
+        savedPhotoInfo.path = destinationFile.getPath();
+        return ResponseEntity.ok(photoInfoService.createPhoto(savedPhotoInfo));
     }
 }
-

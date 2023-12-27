@@ -13,8 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class PhotoInfoService {
-    public CopyOnWriteArrayList<PhotoInfo> photoInfoCollection = new CopyOnWriteArrayList<>();
-
     @Autowired
     public PhotoInfoRepository photoInfoRepository;
 
@@ -23,34 +21,33 @@ public class PhotoInfoService {
     }
 
     public PhotoInfo getPhoto(Integer photoId) {
+        Optional<PhotoInfo> foundPhotoInfo = photoInfoRepository.findById(photoId);
         PhotoInfo resultPhotoInfo = null;
-        Optional<PhotoInfo> foundPhoto = photoInfoCollection.stream().filter((currPhotoInfo) -> {
-            return currPhotoInfo.id == photoId;
-        }).findFirst();
-
-        if (foundPhoto.isPresent()) {
-            resultPhotoInfo = foundPhoto.get();
+        if (foundPhotoInfo.isPresent()) {
+            resultPhotoInfo = foundPhotoInfo.get();
         }
-
         return resultPhotoInfo;
     }
 
     public PhotoInfo createPhoto(PhotoInfo incomingPhotoInfo){
-        photoInfoRepository.save(incomingPhotoInfo);
-        return incomingPhotoInfo;
+        return photoInfoRepository.save(incomingPhotoInfo);
     }
 
     public PhotoInfo updatePhoto(Integer photoId, PhotoInfo incomingPhotoInfo) {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
         foundPhotoInfo.label = incomingPhotoInfo.label;
         foundPhotoInfo.description = incomingPhotoInfo.description;
-        foundPhotoInfo.path = incomingPhotoInfo.path;
-        return foundPhotoInfo;
+        foundPhotoInfo.photoType = null;
+
+        // TODO: Extract PhotoType id from the wrapper object, find the PhotoType Object from repo and then link
+        // the foundPhotoInfo.photoType = whatevertheobjis;
+
+        return photoInfoRepository.save(foundPhotoInfo);
     }
 
     public PhotoInfo deletePhoto(@PathVariable Integer photoId) {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
-        photoInfoCollection.remove(foundPhotoInfo);
+        photoInfoRepository.delete(foundPhotoInfo);
         return foundPhotoInfo;
     }
 }
