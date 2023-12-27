@@ -1,5 +1,6 @@
 package com.omantourism.datamanager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,5 +18,6 @@ public class PhotoType {
     }
 
     @OneToOne(mappedBy = "photoType")
+    @JsonIgnore
     public PhotoInfo photoInfo;
 }

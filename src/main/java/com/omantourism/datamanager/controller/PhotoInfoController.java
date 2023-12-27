@@ -1,6 +1,7 @@
 package com.omantourism.datamanager.controller;
 
 import com.omantourism.datamanager.model.PhotoInfo;
+import com.omantourism.datamanager.model.PhotoInfoWithType;
 import com.omantourism.datamanager.service.PhotoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class PhotoInfoController {
 //    }
 
     @PutMapping(path = "/{photoId}")
-    public PhotoInfo updatePhoto(@PathVariable Integer photoId, @RequestBody PhotoInfo incomingPhotoInfo) {
-        return photoInfoService.updatePhoto(photoId, incomingPhotoInfo);
+    public PhotoInfo updatePhoto(@PathVariable Integer photoId, @RequestBody PhotoInfoWithType incomingPhotoInfoWithType) {
+        return photoInfoService.updatePhoto(photoId, incomingPhotoInfoWithType);
     }
 
     @DeleteMapping(path = "/{photoId}")

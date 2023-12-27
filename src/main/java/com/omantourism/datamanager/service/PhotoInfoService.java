@@ -1,20 +1,23 @@
 package com.omantourism.datamanager.service;
 
 import com.omantourism.datamanager.model.PhotoInfo;
+import com.omantourism.datamanager.model.PhotoInfoWithType;
 import com.omantourism.datamanager.repository.PhotoInfoRepository;
-import org.apache.commons.io.FileUtils;
+import com.omantourism.datamanager.repository.PhotoTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class PhotoInfoService {
     @Autowired
     public PhotoInfoRepository photoInfoRepository;
+
+    @Autowired
+    public PhotoTypeRepository photoTypeRepository;
 
     public List<PhotoInfo> getPhotos() {
         return photoInfoRepository.findAll();
@@ -33,14 +36,11 @@ public class PhotoInfoService {
         return photoInfoRepository.save(incomingPhotoInfo);
     }
 
-    public PhotoInfo updatePhoto(Integer photoId, PhotoInfo incomingPhotoInfo) {
+    public PhotoInfo updatePhoto(Integer photoId, PhotoInfoWithType incomingPhotoInfoWithType) {
         PhotoInfo foundPhotoInfo = getPhoto(photoId);
-        foundPhotoInfo.label = incomingPhotoInfo.label;
-        foundPhotoInfo.description = incomingPhotoInfo.description;
-        foundPhotoInfo.photoType = null;
-
-        // TODO: Extract PhotoType id from the wrapper object, find the PhotoType Object from repo and then link
-        // the foundPhotoInfo.photoType = whatevertheobjis;
+        foundPhotoInfo.label = incomingPhotoInfoWithType.photoInfo.label;
+        foundPhotoInfo.description = incomingPhotoInfoWithType.photoInfo.description;
+        foundPhotoInfo.photoType = photoTypeRepository.findById(incomingPhotoInfoWithType.photoTypeId).get();
 
         return photoInfoRepository.save(foundPhotoInfo);
     }
